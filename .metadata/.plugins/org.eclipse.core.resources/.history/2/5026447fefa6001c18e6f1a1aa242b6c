@@ -1,0 +1,52 @@
+package application;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
+
+import model.entities.Reserva;
+
+public class Program {
+
+	public static void main(String[] args) throws ParseException {
+		Scanner teclado = new Scanner(System.in);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		
+		System.out.print("Numero do quarto: ");
+		int numero = teclado.nextInt();
+		System.out.print("Data do Check-In: dd/MM/yyyy ");
+		Date checkin = sdf.parse(teclado.next());
+		System.out.print("Data do Check-Out: dd/MM/yyyy ");
+		Date checkout = sdf.parse(teclado.next());
+		
+		if(!checkout.after(checkin)) {
+			System.out.println("Erro na reserva: Data de check-Out precisa ser posterior a de Check-In");
+		}
+		else {
+			Reserva reserva = new Reserva(numero, checkin, checkout);
+			System.out.println("Dados da reserva: " + reserva);
+			
+			System.out.println();
+			System.out.println("Entre com as datas para atualizar a sua reserva: ");
+			System.out.print("Data do Check-In: dd/MM/yyyy ");
+			checkin = sdf.parse(teclado.next());
+			System.out.print("Data do Check-Out: dd/MM/yyyy ");
+			checkout = sdf.parse(teclado.next());
+			reserva.updateDates(checkin, checkout);
+			System.out.println("Dados da reserva: " + reserva);
+			
+			Date now = new Date();
+			if(checkin.before(now) || checkout.before(now)) {
+				System.out.println("Erro na reserva: Datas da reserva para atualização precisam ser futuras. ");
+			}
+			else if (!checkout.after(checkin)) {
+				System.out.println("Erro na reserva: Data de check-Out precisa ser posterior a de Check-In");
+			}
+		}
+		
+		teclado.close();
+
+	}
+
+}
